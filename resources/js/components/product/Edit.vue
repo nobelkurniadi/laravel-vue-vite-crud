@@ -66,6 +66,13 @@ export default {
                         this.form = "";
                         this.errors = "";
                         this.$router.push({ path: `/`});
+                        this.$swal({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Product updated successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                     }
                 })
                 .catch((err) => {

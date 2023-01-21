@@ -63,19 +63,31 @@ export default {
         },
 
         destroy(id) {
-            if (!window.confirm("Are you sure?")) {
-                return;
-            }
-
-            axios
-                .delete("/api/product/" + id)
-                .then((res) => {
-                    if (res.status === 200) {
-                        this.fetchData();
-                        // alert(res.data.message)
-                    }
-                })
-                .catch(() => {});
+            this.$swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    axios
+                        .delete("/api/product/" + id)
+                        .then((res) => {
+                            if (res.status === 200) {
+                                this.fetchData();
+                                this.$swal(
+                                        'Deleted!',
+                                        res.data.message,
+                                        'success'
+                                    )
+                            }
+                        })
+                        .catch(() => {});
+                }
+            })
         },
     },
 };
