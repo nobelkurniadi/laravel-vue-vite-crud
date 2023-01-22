@@ -35,31 +35,41 @@
                             </tr>
                         </tbody>
                     </table>
+                    <Bootstrap5Pagination class="justify-content-center" :data="products" @pagination-change-page="getProducts" :limit="2"/>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 export default {
-    data() {
+    name:"products",
+    components:{
+        Bootstrap5Pagination
+    },
+    
+    data(){
         return {
-            products: [],
-        };
+            products:{
+                type:Object,
+                default:null
+            }
+        }
     },
 
     mounted() {
-        this.fetchData();
+        this.getProducts();
     },
 
     methods: {
-        fetchData() {
-            axios
-                .get("/api/products")
-                .then((res) => {
-                    this.products = res.data;
+        async getProducts(page=1){
+                await axios.get(`/api/products?page=${page}`).then(({data})=>{
+                    this.products = data
+                    console.log(data);
+                }).catch(({ response })=>{
+                    console.error(response)
                 })
-                .catch(() => {});
         },
 
         destroy(id) {
