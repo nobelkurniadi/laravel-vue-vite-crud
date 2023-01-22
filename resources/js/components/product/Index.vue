@@ -17,7 +17,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody v-if="(products.data ?? '').length">
                             <tr v-for="(product, index) in products.data" :key="index">
                                 <td>{{ (products.current_page - 1) * products.per_page + index + 1 }}</td>
                                 <td>{{ product.name }}</td>
@@ -33,6 +33,11 @@
                                     >Edit</router-link>
                                     <a href="" class="btn btn-sm btn-danger" @click.prevent="destroy(product.id)">Delete</a>
                                 </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
+                                <td colspan="5"><h5 class="text-center text-danger">No data</h5></td>
                             </tr>
                         </tbody>
                     </table>
@@ -52,10 +57,7 @@ export default {
     
     data(){
         return {
-            products:{
-                type:Object,
-                default:null
-            },
+            products:[],
             keyword: null,
         }
     },
