@@ -2,6 +2,7 @@
     <div class="card">
         <div class="card-header">
             <router-link :to="{ name: 'product.create' }" class="btn btn-primary">Add Product</router-link>
+            <input type="search" v-model="keyword" class="form-control d-inline float-end" placeholder="Search" id="keyword">
         </div>
         <div class="card-body">
             <div class="row">
@@ -54,7 +55,8 @@ export default {
             products:{
                 type:Object,
                 default:null
-            }
+            },
+            keyword: null,
         }
     },
 
@@ -62,11 +64,17 @@ export default {
         this.getProducts();
     },
 
+    watch: {
+        keyword(after, before) {
+            this.getProducts();
+        }
+    },
+
     methods: {
         async getProducts(page=1){
-                await axios.get(`/api/products?page=${page}`).then(({data})=>{
+                await axios.get(`/api/products?page=${page}`, { params: { keyword: this.keyword } }).then(({data})=>{
                     this.products = data
-                    console.log(data);
+                    console.log(keyword.value);
                 }).catch(({ response })=>{
                     console.error(response)
                 })
@@ -102,4 +110,5 @@ export default {
     },
 };
 </script>
-<style lang=""></style>
+<style lang="">
+</style>

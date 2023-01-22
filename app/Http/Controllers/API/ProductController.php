@@ -16,9 +16,10 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $product = Product::latest()->paginate(10);
+        $keyword = '%'.$request->keyword.'%';
+        $product = Product::latest()->where('name', 'like', $keyword)->paginate(10);
         return response()->json($product);
     }
 

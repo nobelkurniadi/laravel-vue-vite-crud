@@ -1,6 +1,6 @@
 ## Laravel Vue Vite
 
-This is Single Page Application CRUD using laravel 9, Vue Js, Sweetalert2 and Vite. you can use this as Starter App for your great App.
+This is Single Page Application CRUD, Search, Pagination using laravel 9, Vue Js, Sweetalert2 and Vite. you can use this as Starter App for your great App.
 
 ## Installation Guide
 
@@ -25,6 +25,7 @@ if you want to create your own project from scratch
 - npm i @vitejs/plugin-vue
 - npm install vue-router
 - npm install -S vue-sweetalert2
+- npm install laravel-vue-pagination
 - create your own model, migration, controller, route, component etc
 - you can imitate this repo
 
