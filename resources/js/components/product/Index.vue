@@ -18,7 +18,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(product, index) in products.data" :key="index">
-                                <td>{{ ++index }}</td>
+                                <td>{{ (products.current_page - 1) * products.per_page + index + 1 }}</td>
                                 <td>{{ product.name }}</td>
                                 <td>{{ product.description }}</td>
                                 <td>{{ product.price }}</td>
