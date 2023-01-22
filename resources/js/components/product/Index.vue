@@ -95,7 +95,7 @@ export default {
                         .delete("/api/product/" + id)
                         .then((res) => {
                             if (res.status === 200) {
-                                this.fetchData();
+                                this.getProducts();
                                 this.$swal(
                                         'Deleted!',
                                         res.data.message,
