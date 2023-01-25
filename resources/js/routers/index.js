@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import Index from "../components/product/Index.vue";
 import Create from "../components/product/Create.vue";
 import Edit from "../components/product/Edit.vue";
+import Login from "../components/auth/Login.vue";
+import Register from "../components/auth/Register.vue";
 
 const routes = [
     { 
@@ -19,6 +21,16 @@ const routes = [
         path: "/product/:id", 
         name: "product.edit", 
         component: Edit
+    },
+    { 
+        path: "/login", 
+        name: "login", 
+        component: Login
+    },
+    { 
+        path: "/register", 
+        name: "register", 
+        component: Register
     },
 ];
 

@@ -1,3 +1,7 @@
 #keyword{
     max-width: 350px;
 }
+
+#login-card, #register-card{
+    max-width: 600px;
+}
