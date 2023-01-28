@@ -42,8 +42,14 @@ export default {
 
     methods: {
         storeData() {
-            axios
-                .post("/api/product", this.form)
+            axios.get('/sanctum/csrf-cookie').then(response => {
+                let token=localStorage.getItem("token");
+                axios.post("/api/product", this.form, { 
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            token: token
+                        }
+                    })
                 .then((res) => {
                     if (res.status === 201) {
                         this.form = "";
@@ -61,6 +67,8 @@ export default {
                 .catch((err) => {
                     this.errors = err.response.data.errors;
                 });
+            });
+            
         },
     },
 };
