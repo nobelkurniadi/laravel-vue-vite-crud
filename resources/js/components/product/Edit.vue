@@ -46,8 +46,13 @@ export default {
 
     methods: {
         editData() {
-            axios
-                .get("/api/product/" + this.$route.params.id)
+            let token=localStorage.getItem("token");
+            axios.get("/api/product/" + this.$route.params.id, { 
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            token: token
+                        }
+                    })
                 .then((res) => {
                     if (res.status === 200) {
                         this.form = res.data.data;
@@ -59,9 +64,14 @@ export default {
         },
 
         updateData() {
-            axios
-                .put("/api/product/" + this.$route.params.id, this.form)
-                .then((res) => {
+            let token=localStorage.getItem("token");
+            axios.put("/api/product/" + this.$route.params.id, this.form, { 
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            token: token
+                        }
+                    })
+                 .then((res) => {
                     if (res.status === 200) {
                         this.form = "";
                         this.errors = "";
