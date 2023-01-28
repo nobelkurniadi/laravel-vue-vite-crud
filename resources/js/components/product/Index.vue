@@ -1,9 +1,10 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <router-link :to="{ name: 'login' }" class="btn btn-primary me-2">Login</router-link>
-            <router-link :to="{ name: 'register' }" class="btn btn-secondary me-2">Register</router-link>
-            <router-link :to="{ name: 'product.create' }" class="btn btn-success">Add Product</router-link>
+            <router-link :to="{ name: 'login' }" v-if="$store.getters.getToken == 0" class="btn btn-primary me-2">Login</router-link>
+            <button type="button" v-if="$store.getters.getToken !== 0" class="btn btn-danger me-2" @click="logout">Logout</button>
+            <router-link :to="{ name: 'register' }" v-if="$store.getters.getToken == 0" class="btn btn-secondary me-2">Register</router-link>
+            <router-link :to="{ name: 'product.create' }" v-if="$store.getters.getToken !== 0" class="btn btn-success">Add Product</router-link>
             <input type="search" v-model="keyword" class="form-control d-inline float-end" placeholder="Search" id="keyword">
         </div>
         <div class="card-body">
@@ -51,6 +52,8 @@
 </template>
 <script>
 import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+import { useRouter } from "vue-router"
+import { useStore } from 'vuex'
 export default {
     name:"products",
     components:{
@@ -111,7 +114,21 @@ export default {
                 }
             })
         },
+        
     },
+    setup(){
+            const router = useRouter();
+            const store = useStore();
+
+            function logout(){
+                store.dispatch('removeToken');
+                router.push({name:'login'})
+            }
+
+            return {
+                logout
+            }
+        }
 };
 </script>
 <style lang="">
