@@ -79,12 +79,21 @@ export default {
 
     methods: {
         async getProducts(page=1){
-                await axios.get(`/api/products?page=${page}`, { params: { keyword: this.keyword } }).then(({data})=>{
-                    this.products = data
-                    console.log(keyword.value);
-                }).catch(({ response })=>{
-                    console.error(response)
-                })
+            await axios.get('/sanctum/csrf-cookie').then(response => {
+                let token=localStorage.getItem("token");
+                axios.get(`/api/products?page=${page}`, { 
+                        params: { keyword: this.keyword },
+                        headers: {
+                        Authorization: `Bearer ${token}`,
+                        token: token
+                        }
+                    }).then(({data})=>{
+                        this.products = data
+                        console.log(keyword.value);
+                    }).catch(({ response })=>{
+                        console.error(response)
+                    });
+            });
         },
 
         destroy(id) {

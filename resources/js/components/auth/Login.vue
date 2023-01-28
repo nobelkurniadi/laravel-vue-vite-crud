@@ -35,14 +35,18 @@
             let error = ref('')
 
             const login = async() =>{
-                await axios.post('/api/login',form).then(res=>{
-                    if(res.data.success){
-                        store.dispatch('setToken',res.data.data.token);
-                        router.push({name:'product.index'})
-                    }else{
-                        error.value = res.data.message;
-                    }
-                })
+                await axios.get('/sanctum/csrf-cookie').then(response => {
+                    // Login...
+                    axios.post('/api/login',form).then(res=>{
+                        if(res.data.success){
+                            store.dispatch('setToken',res.data.data.token);
+                            router.push({name:'product.index'})
+                        }else{
+                            error.value = res.data.message;
+                        }
+                    })
+                });
+
             }
             return{
                 form,
