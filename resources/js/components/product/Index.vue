@@ -130,6 +130,18 @@ export default {
             const store = useStore();
 
             function logout(){
+                let token = localStorage.getItem("token");
+                // let tokenId = token.slice(0, 2);
+                // console.log(tokenId);
+                axios.post('/api/logout', [],{ 
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            token: token
+                        }
+                    }).then(response => {
+                        console.log('OKay');
+                        router.push({name:'login'})
+                });
                 store.dispatch('removeToken');
                 router.push({name:'login'})
             }
