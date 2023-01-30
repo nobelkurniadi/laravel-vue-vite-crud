@@ -64,6 +64,8 @@ export default {
         return {
             products:[],
             keyword: null,
+            router: useRouter(),
+            store: useStore(),
         }
     },
 
@@ -79,8 +81,10 @@ export default {
 
     methods: {
         async getProducts(page=1){
+            
             await axios.get('/sanctum/csrf-cookie').then(response => {
                 let token=localStorage.getItem("token");
+                
                 axios.get(`/api/products?page=${page}`, { 
                         params: { keyword: this.keyword },
                         headers: {
@@ -89,9 +93,11 @@ export default {
                         }
                     }).then(({data})=>{
                         this.products = data
-                        console.log(keyword.value);
                     }).catch(({ response })=>{
-                        console.error(response)
+                        if(response.status == 401){
+                            this.store.dispatch('removeToken');
+                            this.router.push({name:'login'})
+                        }
                     });
             });
         },
@@ -136,15 +142,12 @@ export default {
 
             function logout(){
                 let token = localStorage.getItem("token");
-                // let tokenId = token.slice(0, 2);
-                // console.log(tokenId);
                 axios.post('/api/logout', [],{ 
                         headers: {
                             Authorization: `Bearer ${token}`,
                             token: token
                         }
                     }).then(response => {
-                        console.log('OKay');
                         router.push({name:'login'})
                 });
                 store.dispatch('removeToken');

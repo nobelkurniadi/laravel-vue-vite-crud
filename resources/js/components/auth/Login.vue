@@ -36,10 +36,8 @@
 
             const login = async() =>{
                 await axios.get('/sanctum/csrf-cookie').then(response => {
-                    // Login...
                     axios.post('/api/login',form).then(res=>{
                         if(res.data.success){
-                            console.log(res);
                             store.dispatch('setToken',res.data.data.token);
                             router.push({name:'product.index'})
                         }else{
