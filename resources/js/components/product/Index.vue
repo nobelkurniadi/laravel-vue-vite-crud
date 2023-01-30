@@ -107,8 +107,13 @@ export default {
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    axios
-                        .delete("/api/product/" + id)
+                    let token = localStorage.getItem("token");
+                    axios.delete("/api/product/" + id, { 
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            token: token
+                        }
+                    })
                         .then((res) => {
                             if (res.status === 200) {
                                 this.getProducts();
