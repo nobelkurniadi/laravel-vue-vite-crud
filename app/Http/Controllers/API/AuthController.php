@@ -17,7 +17,6 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            // 'device_name' => 'required',
         ]);
      
         $user = User::where('email', $request->email)->first();
@@ -27,8 +26,10 @@ class AuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+
+        $userIP = \Request::ip();
      
-        $success['token'] = $user->createToken('MyApp')->plainTextToken;
+        $success['token'] = $user->createToken($userIP)->plainTextToken;
         $response = [
                     'success' => true,
                     'data' => $success,
