@@ -84,21 +84,42 @@ export default {
             
             await axios.get('/sanctum/csrf-cookie').then(response => {
                 let token=localStorage.getItem("token");
-                
-                axios.get(`/api/products?page=${page}`, { 
-                        params: { keyword: this.keyword },
+
+                axios.post(`/api/check-user`, [], { 
+                        params: { token: token },
                         headers: {
                         Authorization: `Bearer ${token}`,
                         token: token
                         }
-                    }).then(({data})=>{
-                        this.products = data
-                    }).catch(({ response })=>{
-                        if(response.status == 401){
+                    }).then((response) => {
+                        console.log(response);
+                        if(response.data.status == 200){
+                            axios.get(`/api/products?page=${page}`, { 
+                                params: { keyword: this.keyword },
+                                headers: {
+                                Authorization: `Bearer ${token}`,
+                                token: token
+                                }
+                            }).then(({data})=>{
+                                this.products = data
+                            }).catch(({ response })=>{
+                                if(response.status == 401){
+                                    this.store.dispatch('removeToken');
+                                    this.router.push({name:'login'})
+                                }
+                            });
+                        }else{
                             this.store.dispatch('removeToken');
                             this.router.push({name:'login'})
                         }
+
+                        
+                    }).catch((response)=>{
+                        console.log('failed');
+                        console.log(response);
                     });
+                
+                
             });
         },
 

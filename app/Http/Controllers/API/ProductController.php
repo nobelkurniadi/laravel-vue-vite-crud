@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class ProductController extends Controller
 {
@@ -21,8 +20,6 @@ class ProductController extends Controller
     {
         $keyword = '%'.$request->keyword.'%';
         $product = Product::latest()->where('name', 'like', $keyword)->paginate(10);
-        // $token = PersonalAccessToken::findToken($request->hashedTooken);
-        // $user = $token->tokenable;
         return response()->json($product);
     }
 

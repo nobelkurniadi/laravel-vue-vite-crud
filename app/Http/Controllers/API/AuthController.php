@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -77,5 +78,23 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'You are logged out',
         ]);
+    }
+
+    public function checkAktiveUser(Request $request)
+    {
+        $token = PersonalAccessToken::findToken($request->token);
+        $userIP = \Request::ip();
+        // $user = $token->tokenable;
+        if($userIP == $token->name){
+            return response()->json([
+                'status' => 200,
+                'message' => 'OK',
+            ]);
+        }else{
+            return response()->json([
+                'status' => 401,
+                'message' => 'unauthorized',
+            ]);
+        }
     }
 }
