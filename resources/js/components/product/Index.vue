@@ -66,6 +66,7 @@ export default {
             keyword: null,
             router: useRouter(),
             store: useStore(),
+            token: localStorage.getItem("token"),
         }
     },
 
@@ -81,36 +82,30 @@ export default {
 
     methods: {
         async getProducts(page=1){
-            
             await axios.get('/sanctum/csrf-cookie').then(response => {
-                let token=localStorage.getItem("token");
-
                 axios.post(`/api/check-user`, [], { 
-                        params: { token: token },
+                        params: { token: this.token },
                         headers: {
-                        Authorization: `Bearer ${token}`,
-                        token: token
+                        Authorization: `Bearer ${this.token}`,
+                        token: this.token
                         }
                     }).then((response) => {
-                        console.log(response);
                         if(response.data.status == 200){
                             axios.get(`/api/products?page=${page}`, { 
                                 params: { keyword: this.keyword },
                                 headers: {
-                                Authorization: `Bearer ${token}`,
-                                token: token
+                                Authorization: `Bearer ${this.token}`,
+                                token: this.token
                                 }
                             }).then(({data})=>{
                                 this.products = data
                             }).catch(({ response })=>{
                                 if(response.status == 401){
-                                    this.store.dispatch('removeToken');
-                                    this.router.push({name:'login'})
+                                    this.logout();
                                 }
                             });
                         }else{
-                            this.store.dispatch('removeToken');
-                            this.router.push({name:'login'})
+                            this.logout();
                         }
 
                         
@@ -134,11 +129,10 @@ export default {
                 confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    let token = localStorage.getItem("token");
                     axios.delete("/api/product/" + id, { 
                         headers: {
-                            Authorization: `Bearer ${token}`,
-                            token: token
+                            Authorization: `Bearer ${this.token}`,
+                            token: this.token
                         }
                     })
                         .then((res) => {
@@ -155,30 +149,22 @@ export default {
                 }
             })
         },
+
+        logout(){
+            axios.post('/api/logout', [],{ 
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                        token: this.token
+                    }
+                }).then(response => {
+                    this.router.push({name:'login'})
+            });
+            this.store.dispatch('removeToken');
+            this.router.push({name:'login'})
+        },
         
     },
-    setup(){
-            const router = useRouter();
-            const store = useStore();
-
-            function logout(){
-                let token = localStorage.getItem("token");
-                axios.post('/api/logout', [],{ 
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            token: token
-                        }
-                    }).then(response => {
-                        router.push({name:'login'})
-                });
-                store.dispatch('removeToken');
-                router.push({name:'login'})
-            }
-
-            return {
-                logout
-            }
-        }
+    
 };
 </script>
 <style lang="">
