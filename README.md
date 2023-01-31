@@ -24,6 +24,7 @@ if you want to create your own project from scratch
 - npm install vue@next vue-loader@next
 - npm i @vitejs/plugin-vue
 - npm install vue-router
+- npm install vuex@next --save
 - npm install -S vue-sweetalert2
 - npm install laravel-vue-pagination
 - create your own model, migration, controller, route, component etc
